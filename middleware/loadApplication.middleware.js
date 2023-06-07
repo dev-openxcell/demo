@@ -13,7 +13,7 @@ exports.loadApplication = async (req, res, next, applicationId) => {
     }
     
     let application = await Application.findById(applicationId, projection)
-    .populate({ path: 'jobId', select: 'minimumExperience jobTitle jobDescrpition isCommitmentRequired minimumJobCommitment paymentType salary' })
+    .populate({ path: 'jobId', select: '-creatorId -creatorName' })
     .populate({ path: 'applierId', select: 'email name contactNumber contactEmail resume' })
 
     if(!application) return sendres(404, { message: `application ${MESSAGE.NOT_FOUND}` }, res)
