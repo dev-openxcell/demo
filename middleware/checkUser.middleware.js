@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../modules/user')
-const { sendres, havingError } = require('../utils/sendres')
-const { ENV } = require('../utils/envLoader')
-const { MESSAGE } = require('../utils/constant')
+const { ENV } = require('../utils/envLoader.util')
+const { MESSAGE } = require('../utils/constant.util')
+const { sendres, havingError } = require('../utils/sendres.util')
 
 exports.checkUser = async (req, res, next) => {
   try{
     if(req.headers.authorization){
       let token = req.headers.authorization.split(' ')[1]
 
-      if(!token) return sendres(403, { message: MESSAGE.HEADER_EMPTY }, res)
+      if(!token) return sendres(401, { message: MESSAGE.HEADER_EMPTY }, res)
 
       let payload = jwt.verify(token, ENV.USER_SECRET)
 
@@ -19,7 +19,7 @@ exports.checkUser = async (req, res, next) => {
       next()
     }
     else{
-      return sendres(403, { message: MESSAGE.HEADER_MISSING }, res)
+      return sendres(401, { message: MESSAGE.HEADER_MISSING }, res)
     }
   }
   catch(err){

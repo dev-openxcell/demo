@@ -7,6 +7,9 @@ exports.havingError = async (err, res) => {
     if(err.name === 'JsonWebTokenError'){
       return res.status(401).json({ message: 'not authorized signature mismatched' })
     }
+    if(err.name === 'TokenExpiredError'){
+      return res.status(401).json({ message: 'token expired' })
+    }
     let ms = JSON.parse(err.message)
     if(ms.code === "001"){
       return res.status(400).json({ message: ms.message })

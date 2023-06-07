@@ -32,18 +32,18 @@ const JobSchema = Joi.object({
   minimumJobCommitment: Joi.number().when('isCommitmentRequired', {
     is: true,
     then: Joi.number().min(0).required(),
-    otherwise: Joi.number().min(0).optional()
+    otherwise: Joi.number().optional()
   }),
-  paymentType: Joi.string().valid('HOURLY', 'MONTHLY'),
+  paymentType: Joi.string().valid('HOURLY', 'MONTHLY').required(),
   salary: Joi.number().min(1).max(10000000).required()
 })
 
 const ApplierSchema = Joi.object({
   totalExperience: Joi.number().min(0).max(50).required(),
-  linkToResume: Joi.string().dataUri().optional(),
+  linkToResume: Joi.string().uri().optional(),
   pastExperiences: Joi.array().items({
     role: Joi.string().min(2).max(30).required(),
-    descripion: Joi.string().min(15).required(),
+    descripion: Joi.string().min(15).max(2000).required(),
     duration: Joi.number().precision(1).min(0),
   }).optional(),
 })

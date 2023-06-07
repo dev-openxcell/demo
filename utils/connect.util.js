@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { ENV } = require('../utils/envLoader')
+const { ENV } = require('./envLoader.util')
 
 const connectionString = `mongodb://${ENV.DB_USER}:${ENV.DB_PASSWORD}@${ENV.DB_SERVER}:${ENV.DB_PORT}/${ENV.DB_NAME}`
 
