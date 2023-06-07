@@ -24,6 +24,9 @@ const UserSchema = new mongoose.Schema({
   },
   contactEmail: {
     type: String
+  },
+  resume: {
+    type: String
   }
 }, { timestamps: true, versionKey: false, skipVersioning: true, collection: 'users' })
 

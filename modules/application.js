@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const ApplierSchema = new mongoose.Schema({
+const ApplicationSchema = new mongoose.Schema({
   jobId: {
     type: mongoose.Types.ObjectId,
     ref: 'Job'
@@ -33,7 +33,7 @@ const ApplierSchema = new mongoose.Schema({
   linkToResume: {
     type: String
   }
-}, { timestamps: true, versionKey: false, skipVersioning: true, collection: 'Appliers' })
+}, { timestamps: true, versionKey: false, skipVersioning: true, collection: 'applications' })
 
-const Applier = mongoose.model('Applier', ApplierSchema)
-module.exports = { Applier }
+const Application = mongoose.model('Application', ApplicationSchema)
+module.exports = { Application }

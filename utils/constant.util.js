@@ -10,7 +10,9 @@ const MESSAGE = {
   'PASSWORD_FAIL': 'password does not match',
   'HEADER_MISSING': 'authorization header missing',
   'HEADER_EMPTY': 'authorization is empty',
-  'NOT_FOUND': 'document not found'
+  'NOT_FOUND': 'document not found',
+  'FILE_ERROR': 'only files with extension .pdf and .doc are allowed',
+  'FILE_NOT_FOUND': 'file not uploaded'
 }
 
 module.exports = { CODE, MESSAGE }

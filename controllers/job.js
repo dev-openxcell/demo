@@ -1,7 +1,7 @@
 const fs = require('node:fs')
 const path = require('node:path')
 const { Job } = require('../modules/job')
-const { Applier } = require('../modules/applier')
+const { Application } = require('../modules/application')
 const { MESSAGE, CODE } = require('../utils/constant.util')
 const { havingError, sendres } = require('../utils/sendres.util')
 const { applierValidation, jobValidation } = require('../utils/validator.util')
@@ -30,7 +30,7 @@ exports.apply = async (req, res) => {
       linkToResume,
     }
 
-    await Applier.create(body)
+    await Application.create(body)
 
     sendres(200, {}, res)
   }
@@ -115,9 +115,9 @@ exports.getApplied = async (req, res) => {
     }
     
     if(user.userType !== "EMPLOYEE") {
-      return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE })
+      return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
     }
-    applications = await Applier.find({ applierId: user._id }, projection).sort({ createdAt: -1 }).lean()
+    applications = await Application.find({ applierId: user._id }, projection).sort({ createdAt: -1 }).lean()
 
     sendres(200, { applications }, res)
   }
@@ -126,21 +126,21 @@ exports.getApplied = async (req, res) => {
   }
 }
 
-exports.getApplier = async (req, res) => {
+exports.getApplication = async (req, res) => {
   try{
-    const applier = req.applier
+    const application = req.application
 
-    sendres(200, { applier }, res)
+    sendres(200, { application }, res)
   }
   catch(err){
     havingError(err, res)
   }
 }
 
-exports.getAppliers = async (req, res) => {
+exports.getApplications = async (req, res) => {
   try{
     const user = req.user
-    const job = req.job
+    const job = req.job.toJSON()
     let applications = []
 
     const projection = {
@@ -152,7 +152,10 @@ exports.getAppliers = async (req, res) => {
     if(user.userType !== "EMPLOYER") {
       return sendres(401, { message: MESSAGE.ONLY_EMPLOYER })
     }
-    applications = await Applier.find({ employerId: user._id, jobId: job._id }, projection).sort({ createdAt: -1 }).lean()
+    applications = await Application.find({ employerId: user._id, jobId: job._id }, projection).sort({ createdAt: -1 }).lean()
+
+    delete job.creatorName
+    delete job.creatorId
 
     sendres(200, { job, applications }, res)
   }
@@ -187,7 +190,7 @@ exports.getJobs = async (req, res) => {
       jobs = await Job.find({ creatorId: user._id }, projection).sort({ createdAt: -1 }).lean()
     }
     else{
-      jobs = await Job.find().sort({ createdAt: -1 }, projection).lean()
+      jobs = await Job.find({}, projection).sort({ createdAt: -1 }).lean()
     }
 
     sendres(200, { jobs }, res)
@@ -199,14 +202,27 @@ exports.getJobs = async (req, res) => {
 
 exports.uploadFile = async (req, res) => {
   try{
+    const user = req.user
     const file = req.file
-    if(file.mimetype === "application/pdf" || file.mimetype === "application/msword"){
-      fs.writeFileSync(path.resolve(__dirname, `../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`), file.buffer)
 
+    if(!file) return sendres(400, { message: MESSAGE.FILE_NOT_FOUND }, res)
+    if(user.userType !== 'EMPLOYEE') return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE}, res)
+
+    if(["application/msword", "application/pdf"].includes(file.mimetype)){
+      let filepath = path.resolve(__dirname, `../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`)
+      fs.writeFileSync(filepath, file.buffer)
+
+      if(user.resume){
+        fs.unlinkSync(user.resume)
+      }
+      
+      user.resume = filepath
+      await user.save()
       return sendres(200, {}, res)
+
     }
     else{
-      return sendres(200, { message: 'only files with extension .pdf and .doc are allowed' }, res)
+      return sendres(200, { message: MESSAGE.FILE_ERROR }, res)
     }
   }
   catch(err){

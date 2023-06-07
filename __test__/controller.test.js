@@ -637,14 +637,14 @@ describe('POST /apply/:jobId', () => {
   })
 })
 
-describe('GET /getAppliers', () => { 
+describe('GET /getApplications', () => { 
   describe('passing test', () => { 
     test('should return 200', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`).set("authorization", `bearer ${employertoken}`)
+      const responce = await request(app).get(`/api/applications/${jobId}`).set("authorization", `bearer ${employertoken}`)
       expect(responce.statusCode).toBe(200)
     })
     test('should return applier object', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`).set("authorization", `bearer ${employertoken}`)
+      const responce = await request(app).get(`/api/applications/${jobId}`).set("authorization", `bearer ${employertoken}`)
       expect(responce.body).toBeDefined()
       expect(responce.body.applications).toBeDefined()
       expect(responce.body.job).toBeDefined()
@@ -655,23 +655,23 @@ describe('GET /getAppliers', () => {
 
   describe('failing cases', () => { 
     test('should return with status 401 missing header', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`)
+      const responce = await request(app).get(`/api/applications/${jobId}`)
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 missing token', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`).set({ "authorization": `bearer`})
+      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`).set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer ${employertoken}werw`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/appliers/${jobId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 404 job/application not found', async () => { 
-      const responce = await request(app).get(`/api/appliers/64803e6ae19dc3dc26e228f7`).set({ "authorization": `bearer ${employertoken}`})
+      const responce = await request(app).get(`/api/applications/64803e6ae19dc3dc26e228f7`).set({ "authorization": `bearer ${employertoken}`})
       expect(responce.statusCode).toBe(404)
     })
   })
@@ -711,38 +711,38 @@ describe('GET /getApplied', () => {
   })
 })
 
-describe('GET /getApplier', () => { 
+describe('GET /getApplication', () => { 
   describe('passing test', () => { 
     test('should return 200', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`).set("authorization", `bearer ${employertoken}`)
+      const responce = await request(app).get(`/api/application/${applicationId}`).set("authorization", `bearer ${employertoken}`)
       expect(responce.statusCode).toBe(200)
     })
     test('should return applier object', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`).set("authorization", `bearer ${employertoken}`)
+      const responce = await request(app).get(`/api/application/${applicationId}`).set("authorization", `bearer ${employertoken}`)
       expect(responce.body).toBeDefined()
-      expect(responce.body.applier).toBeDefined()
+      expect(responce.body.application).toBeDefined()
     })
   })
 
   describe('failing cases', () => { 
     test('should return with status 401 missing header', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`)
+      const responce = await request(app).get(`/api/application/${applicationId}`)
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 missing token', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`).set({ "authorization": `bearer`})
+      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`).set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer ${employertoken}werw`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/applier/${applicationId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 404 job/application not found', async () => { 
-      const responce = await request(app).get(`/api/appliers/64803e6ae19dc3dc26e228f7`).set({ "authorization": `bearer ${employertoken}`})
+      const responce = await request(app).get(`/api/application/64803e6ae19dc3dc26e228f7`).set({ "authorization": `bearer ${employertoken}`})
       expect(responce.statusCode).toBe(404)
     })
   })
