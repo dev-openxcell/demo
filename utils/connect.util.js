@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const { ENV } = require('./envLoader.util')
 
-const connectionString = `mongodb://${ENV.DB_USER}:${ENV.DB_PASSWORD}@${ENV.DB_SERVER}:${ENV.DB_PORT}/${ENV.DB_NAME}`
+const connectionString = ENV.DB_URL
 
 let connect = async () => {
     try {
-        await mongoose.connect(`mongodb://${ENV.DB_SERVER}:${ENV.DB_PORT}/${ENV.DB_NAME}`)
-        // await mongoose.connect(connectionString)
+        // await mongoose.connect(`mongodb://${ENV.DB_SERVER}:${ENV.DB_PORT}/${ENV.DB_NAME}`)
+        await mongoose.connect(connectionString)
 
         console.log('DB connected')
     }
