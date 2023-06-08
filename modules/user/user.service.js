@@ -8,3 +8,7 @@ exports.createUser = async (body) => {
 exports.getUser = async (query, projection = {}) => {
   return await User.findOne(query, projection).lean()
 }
+
+exports.getUserHydrated = async (query, projection = {}) => {
+  return await User.findOne(query, projection)
+}

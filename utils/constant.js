@@ -3,8 +3,8 @@ const CODE = {
 }
 
 const OPEN_URLS = [
-  '/register',
-  '/login'
+  '/api/register',
+  '/api/login'
 ]
 
 const MODELS = {
@@ -35,7 +35,8 @@ const MESSAGE = {
   'HEADER_EMPTY': 'authorization is empty',
   'NOT_FOUND': 'document not found',
   'FILE_ERROR': 'only files with extension .pdf and .doc are allowed',
-  'FILE_NOT_FOUND': 'file not uploaded'
+  'FILE_NOT_FOUND': 'file not uploaded',
+  'DUPLICATE': 'duplicate record found'
 }
 
 const ERROR_NAME = {

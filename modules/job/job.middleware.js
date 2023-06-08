@@ -9,6 +9,7 @@ exports.checkFileExtension = async (req, res, next) => {
 
     if(ALLOWED_EXTENSION.includes(file.mimetype)){
       next()
+      return
     }
 
     return sendres( 400, { message: MESSAGE.FILE_ERROR }, res)

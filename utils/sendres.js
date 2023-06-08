@@ -6,6 +6,7 @@ exports.sendres = async (statusCode=204, data, res) => {
 }
 exports.havingError = async (err, res) => {
   try{
+    console.log(err)
     if(err.name === ERROR_NAME.TOKEN_INVALID){
       return res.status(401).json({ message: 'not authorized signature mismatched' })
     }
@@ -16,7 +17,6 @@ exports.havingError = async (err, res) => {
     if(ms.code === "001"){
       return res.status(400).json({ message: ms.message })
     }
-    console.log(err)
     res.status(500).json({ message: err.message })
   }
   catch(error){

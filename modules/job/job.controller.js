@@ -78,7 +78,7 @@ exports.editJob = async (req, res) => {
     
     const value = validator.JobValidation(req.body)
 
-    await service.updateJob(job._id.toString, value)
+    await service.updateJob(job._id.toString(), value)
 
     sendres(200, {}, res)
   }
@@ -194,7 +194,7 @@ exports.uploadFile = async (req, res) => {
 
     if(user.userType !== ENUMS.EMPLOYEE) return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
 
-    let filepath = path.resolve(__dirname, `../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`)
+    let filepath = path.resolve(__dirname, `../../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`)
     fs.writeFileSync(filepath, file.buffer)
 
     if(user.resume){

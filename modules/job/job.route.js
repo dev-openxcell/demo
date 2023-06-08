@@ -1,4 +1,5 @@
 const jobRouter = require('express').Router()
+const multer = require('multer')
 const controller = require('./job.controller')
 const middleware = require('./job.middleware')
 const { loadJob } = require('../../middleware/loadJob.middleware')

@@ -1,6 +1,6 @@
 const request = require('supertest')
 const { app } = require('../server')
-const { clearDb } = require('../utils/clearDb.util')
+const { clearDb } = require('../utils/clearDb')
 
 const PassingEmployerRegister = {
   "email": "devdutt.chudasama@openxcell.com",
