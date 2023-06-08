@@ -1,26 +1,32 @@
 const mongoose = require('mongoose')
+const { MODELS } = require('../../utils/constant')
 
 const ApplicationSchema = new mongoose.Schema({
   jobId: {
     type: mongoose.Types.ObjectId,
-    ref: 'Job'
+    required: true,
+    ref: MODELS.JOB
   },
   applierId: {
     type: mongoose.Types.ObjectId,
-    ref: 'User'
+    required: true,
+    ref: MODELS.USER
   },
   employerId: {
     type: mongoose.Types.ObjectId,
-    ref: 'User'
+    required: true,
+    ref: MODELS.USER
   },
   jobTitle: {
     type: String,
+    required: [true, 'jobTitle is required']
   },
   applierName: {
-    type: String
+    type: String,
   },
   totalExperience: {
-    type: Number
+    type: Number,
+    required: [true, 'totalExperience is required']
   },
   pastExperiences: [
     _id=false,
@@ -35,5 +41,5 @@ const ApplicationSchema = new mongoose.Schema({
   }
 }, { timestamps: true, versionKey: false, skipVersioning: true, collection: 'applications' })
 
-const Application = mongoose.model('Application', ApplicationSchema)
+const Application = mongoose.model(MODELS.APPLICATION, ApplicationSchema)
 module.exports = { Application }

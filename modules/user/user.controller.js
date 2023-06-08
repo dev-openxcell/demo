@@ -1,18 +1,14 @@
-const jwt = require('jsonwebtoken') 
 const { v4: uuidv4 } = require('uuid')
-const { User } = require('../modules/user')
-const { ENV } = require('../utils/envLoader.util')
-const { CODE, MESSAGE } = require('../utils/constant.util')
-const { sendres, havingError } = require('../utils/sendres.util')
-const { generateUserPayload } = require('../utils/createPayload.util')
-const { createPassword, matchPassword } = require('../utils/encrypt.util')
-const { registerValidate, loginValidation, profileValidation } = require('../utils/validator.util')
+const service = require('./user.service')
+const validation = require('./user.validation')
+const { MESSAGE } = require('../../utils/constant')
+const { sendres, havingError } = require('../../utils/sendres')
+const { createToken } = require('../../auth/isAuthenticated')
+const { createPassword, matchPassword } = require('../../utils/encrypt')
 
 exports.registerUser = async (req, res) => {
   try{
-    const { error, value } = registerValidate(req.body)
-
-    if(error){ throw new Error(JSON.stringify({ code: CODE.validation, message: error.message })) }
+    const value = validation.createUserValidation(req.body)
 
     const { email, password, name, userType, contactNumber, contactEmail } = value
 
@@ -28,9 +24,9 @@ exports.registerUser = async (req, res) => {
       contactNumber
     }
 
-    await User.create(body)
+    await service.createUser(body)
 
-    sendres(201, {  }, res)
+    sendres(201, {}, res)
   }
   catch(err){
     havingError(err, res)
@@ -39,13 +35,11 @@ exports.registerUser = async (req, res) => {
 
 exports.login = async (req, res) => {
   try{
-    const { error, value } = loginValidation(req.body)
-
-    if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
+    const value = validation.loginValidation(req.body) 
 
     const { email, password } = value
 
-    const user = await User.findOne({ email }).lean()
+    const user = await service.getUser({ email }, {})
 
     if(!user) return sendres(404, { message: MESSAGE.NOT_REGISTERED }, res)
 
@@ -53,9 +47,7 @@ exports.login = async (req, res) => {
 
     if(!matchPassword(salt, password, user.password)) return sendres(401, { message: MESSAGE.PASSWORD_FAIL }, res)
 
-    const payload = generateUserPayload(user)
-
-    const token = jwt.sign(payload, ENV.USER_SECRET, { expiresIn: '24h' })
+    const token = createToken(user)
 
     sendres(200, { token }, res)
   }
@@ -80,9 +72,7 @@ exports.getProfile = async (req, res) => {
 
 exports.editProfile = async (req, res) => {
   try{
-    const { error, value } = profileValidation(req.body)
-
-    if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
+    const value = validation.editProfileValidation(req.body)
 
     const { name, contactNumber, contactEmail } = value
 

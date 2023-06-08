@@ -1,21 +1,19 @@
 const fs = require('node:fs')
 const path = require('node:path')
-const { Job } = require('../modules/job')
-const { Application } = require('../modules/application')
-const { MESSAGE, CODE } = require('../utils/constant.util')
-const { havingError, sendres } = require('../utils/sendres.util')
-const { applierValidation, jobValidation } = require('../utils/validator.util')
+const { MESSAGE, ENUMS } = require('../../utils/constant')
+const { havingError, sendres } = require('../../utils/sendres')
+
+const validator = require('./job.validation')
+const service = require('./job.service')
 
 exports.apply = async (req, res) => {
   try{
     const user = req.user
     const job = req.job
 
-    if(user.userType !== "EMPLOYEE") return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
+    if(user.userType !== ENUMS.EMPLOYEE) return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
 
-    const { error, value } = applierValidation(req.body)
-
-    if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
+    const value = validator.ApplicationValidation(req.body)
 
     const { totalExperience, pastExperiences, linkToResume } = value
     
@@ -30,7 +28,7 @@ exports.apply = async (req, res) => {
       linkToResume,
     }
 
-    await Application.create(body)
+    await service.createApplication(body)
 
     sendres(200, {}, res)
   }
@@ -43,13 +41,11 @@ exports.createJob = async (req, res) => {
   try{
     const user = req.user
 
-    if(user.userType !== "EMPLOYER") return sendres(401, { message: MESSAGE.ONLY_EMPLOYER }, res)
+    if(user.userType !== ENUMS.EMPLOYER) return sendres(401, { message: MESSAGE.ONLY_EMPLOYER }, res)
     
-    const { error, value } = jobValidation(req.body)
+    const value = validator.JobValidation(req.body)
 
-    if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
-
-    const { minimumExperience, jobTitle, jobDescrpition, isCommitmentRequired, minimumJobCommitment, paymentType, salary} = value
+    const { minimumExperience, jobTitle, jobDescrpition, isCommitmentRequired, minimumJobCommitment, paymentType, salary } = value
 
     const body = {
       creatorId: user._id, 
@@ -63,7 +59,7 @@ exports.createJob = async (req, res) => {
       salary, 
     }
 
-    await Job.create(body)
+    await service.createJob(body)
 
     sendres(201, {}, res)
   }
@@ -77,24 +73,12 @@ exports.editJob = async (req, res) => {
     const job = req.job
     const user = req.user
     
-    if(user.userType !== "EMPLOYER") return sendres(401, { message: MESSAGE.ONLY_EMPLOYER }, res)
+    if(user.userType !== ENUMS.EMPLOYER) return sendres(401, { message: MESSAGE.ONLY_EMPLOYER }, res)
     if(user._id.toString() !== job.creatorId.toString()) return sendres(401, { message: MESSAGE.NOT_OWNER }, res)
     
-    const { error, value } = jobValidation(req.body)
+    const value = validator.JobValidation(req.body)
 
-    if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
-
-    const { minimumExperience, jobTitle, jobDescrpition, isCommitmentRequired, minimumJobCommitment, paymentType, salary} = value
-
-    job.minimumExperience = minimumExperience 
-    job.jobTitle = jobTitle 
-    job.jobDescrpition = jobDescrpition 
-    job.isCommitmentRequired = isCommitmentRequired 
-    job.minimumJobCommitment = minimumJobCommitment 
-    job.paymentType = paymentType 
-    job.salary = salary 
-
-    await job.save()
+    await service.updateJob(job._id.toString, value)
 
     sendres(200, {}, res)
   }
@@ -107,6 +91,7 @@ exports.getApplied = async (req, res) => {
   try{
     const user = req.user
     let applications = []
+    const { limit, skip } = req.query
 
     const projection = {
       totalExperience: 1,
@@ -114,10 +99,10 @@ exports.getApplied = async (req, res) => {
       jobTitle: 1,
     }
     
-    if(user.userType !== "EMPLOYEE") {
+    if(user.userType !== ENUMS.EMPLOYEE) {
       return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
     }
-    applications = await Application.find({ applierId: user._id }, projection).sort({ createdAt: -1 }).lean()
+    applications = await service.getApplications({ applierId: user._id }, projection, limit ? limit : 25, skip ? skip : 0)
 
     sendres(200, { applications }, res)
   }
@@ -139,6 +124,7 @@ exports.getApplication = async (req, res) => {
 
 exports.getApplications = async (req, res) => {
   try{
+    const { limit, skip } = req.query
     const user = req.user
     const job = req.job.toJSON()
     let applications = []
@@ -149,10 +135,10 @@ exports.getApplications = async (req, res) => {
       totalExperience: 1,
     }
     
-    if(user.userType !== "EMPLOYER") {
+    if(user.userType !== ENUMS.EMPLOYER) {
       return sendres(401, { message: MESSAGE.ONLY_EMPLOYER })
     }
-    applications = await Application.find({ employerId: user._id, jobId: job._id }, projection).sort({ createdAt: -1 }).lean()
+    applications = await service.getApplications({ employerId: user._id, jobId: job._id }, projection, limit ? limit : 25, skip ? skip : 0)
 
     delete job.creatorName
     delete job.creatorId
@@ -177,6 +163,7 @@ exports.getJob = async (req, res) => {
 
 exports.getJobs = async (req, res) => {
   try{
+    const { limit, skip } = req.query
     const user = req.user
     let jobs = []
 
@@ -186,13 +173,13 @@ exports.getJobs = async (req, res) => {
       jobTitle: 1,
       jobDescrpition: 1,
     }
-    if(user.userType === "EMPLOYER") {
-      jobs = await Job.find({ creatorId: user._id }, projection).sort({ createdAt: -1 }).lean()
-    }
-    else{
-      jobs = await Job.find({}, projection).sort({ createdAt: -1 }).lean()
+    const qury = {}
+    if(user.userType === ENUMS.EMPLOYER) {
+      Object.assign(qury, { creatorId: user._id })
     }
 
+    jobs = await service.getJobs(qury, projection, limit ? limit : 25, skip ? skip : 0)
+    
     sendres(200, { jobs }, res)
   }
   catch(err){
@@ -205,25 +192,19 @@ exports.uploadFile = async (req, res) => {
     const user = req.user
     const file = req.file
 
-    if(!file) return sendres(400, { message: MESSAGE.FILE_NOT_FOUND }, res)
-    if(user.userType !== 'EMPLOYEE') return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE}, res)
+    if(user.userType !== ENUMS.EMPLOYEE) return sendres(401, { message: MESSAGE.ONLY_EMPLOYEE }, res)
 
-    if(["application/msword", "application/pdf"].includes(file.mimetype)){
-      let filepath = path.resolve(__dirname, `../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`)
-      fs.writeFileSync(filepath, file.buffer)
+    let filepath = path.resolve(__dirname, `../uploads/${Date.now()}_${file.originalname.trim().replace(' ', "_")}`)
+    fs.writeFileSync(filepath, file.buffer)
 
-      if(user.resume){
-        fs.unlinkSync(user.resume)
-      }
-      
-      user.resume = filepath
-      await user.save()
-      return sendres(200, {}, res)
-
+    if(user.resume){
+      fs.unlinkSync(user.resume)
     }
-    else{
-      return sendres(200, { message: MESSAGE.FILE_ERROR }, res)
-    }
+    
+    user.resume = filepath
+    await user.save()
+    return sendres(200, {}, res)
+
   }
   catch(err){
     havingError(err, res)

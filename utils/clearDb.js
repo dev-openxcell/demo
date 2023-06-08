@@ -1,6 +1,6 @@
-const { User } = require('../modules/user')
-const { Job } = require('../modules/job')
-const { Application } = require('../modules/application')
+const { User } = require('../db/models/user')
+const { Job } = require('../db/models/job')
+const { Application } = require('../db/models/application')
 const mongoose = require('mongoose')
 
 exports.clearDb = async () => {

@@ -1,6 +1,6 @@
-const { Application } = require('../modules/application')
-const { MESSAGE } = require('../utils/constant.util')
-const { sendres, havingError } = require('../utils/sendres.util')
+const { Application } = require('../db/models/application')
+const { MESSAGE } = require('../utils/constant')
+const { sendres, havingError } = require('../utils/sendres')
 
 exports.loadApplication = async (req, res, next, applicationId) => {
   try{

@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-const { User } = require('../modules/user')
-const { ENV } = require('../utils/envLoader.util')
-const { MESSAGE } = require('../utils/constant.util')
-const { sendres, havingError } = require('../utils/sendres.util')
+const { User } = require('../db/models/user')
+const { ENV } = require('../utils/envLoader')
+const { MESSAGE } = require('../utils/constant')
+const { sendres, havingError } = require('../utils/sendres')
 
 exports.checkUser = async (req, res, next) => {
   try{

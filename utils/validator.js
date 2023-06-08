@@ -38,7 +38,7 @@ const JobSchema = Joi.object({
   salary: Joi.number().min(1).max(10000000).required()
 })
 
-const ApplierSchema = Joi.object({
+const ApplicationSchema = Joi.object({
   totalExperience: Joi.number().min(0).max(50).required(),
   linkToResume: Joi.string().uri().optional(),
   pastExperiences: Joi.array().items({
@@ -52,4 +52,4 @@ exports.registerValidate = validate(UserRegisterSchema)
 exports.loginValidation = validate(LoginSchema)
 exports.profileValidation = validate(EditProfileSchema)
 exports.jobValidation = validate(JobSchema)
-exports.applierValidation = validate(ApplierSchema)
+exports.applicationValidation = validate(ApplicationSchema)

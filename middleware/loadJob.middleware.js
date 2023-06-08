@@ -1,6 +1,6 @@
-const { Job } = require('../modules/job')
-const { MESSAGE } = require('../utils/constant.util')
-const { sendres, havingError } = require('../utils/sendres.util')
+const { Job } = require('../db/models/job')
+const { MESSAGE } = require('../utils/constant')
+const { sendres, havingError } = require('../utils/sendres')
 
 exports.loadJob = async (req, res, next, jobId) => {
   try{
