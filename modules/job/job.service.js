@@ -1,12 +1,12 @@
 const { Application } = require('../../db/models/application')
 const { Job } = require('../../db/models/job')
 
-exports.createJob = (body) => {
-  Job.create(body)
+exports.createJob =  (body) => {
+  return Job.create(body)
 }
 
 exports.updateJob = (jobId, body) => {
-  Job.findByIdAndUpdate(jobId, body)
+  return Job.findByIdAndUpdate(jobId, body)
 }
 
 exports.getOneJob = (jobId, projection) => {
@@ -18,7 +18,7 @@ exports.getJobs = (query, projection={}, limit=10, skip, sortObj={ createdAt: -1
 }
 
 exports.createApplication = (body) => {
-  Application.create(body)
+  return Application.create(body)
 }
 
 exports.getApplication = (applicationId, projection) => {

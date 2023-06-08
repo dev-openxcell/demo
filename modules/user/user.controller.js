@@ -24,7 +24,7 @@ exports.registerUser = async (req, res) => {
       contactNumber
     }
 
-    service.createUser(body)
+    await service.createUser(body)
 
     sendres(201, {}, res)
   }

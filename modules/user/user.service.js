@@ -1,7 +1,7 @@
 const { User } = require('../../db/models/user')
 
 exports.createUser = (body) => {
-  User.create(body)
+  return User.create(body)
 }
 
 exports.getUser = (query, projection = {}) => {

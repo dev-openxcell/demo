@@ -28,7 +28,7 @@ exports.apply = async (req, res) => {
       linkToResume,
     }
 
-    service.createApplication(body)
+    await service.createApplication(body)
 
     sendres(200, {}, res)
   }
@@ -59,7 +59,7 @@ exports.createJob = async (req, res) => {
       salary, 
     }
 
-    service.createJob(body)
+    await service.createJob(body)
 
     sendres(201, {}, res)
   }
@@ -78,7 +78,7 @@ exports.editJob = async (req, res) => {
     
     const value = validator.JobValidation(req.body)
 
-    service.updateJob(job._id.toString(), value)
+    await service.updateJob(job._id.toString(), value)
 
     sendres(200, {}, res)
   }
