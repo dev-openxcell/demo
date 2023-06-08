@@ -1,14 +1,13 @@
 const { User } = require('../../db/models/user')
 
-exports.createUser = async (body) => {
-  await User.create(body)
-  return
+exports.createUser = (body) => {
+  User.create(body)
 }
 
-exports.getUser = async (query, projection = {}) => {
-  return await User.findOne(query, projection).lean()
+exports.getUser = (query, projection = {}) => {
+  return User.findOne(query, projection).lean()
 }
 
-exports.getUserHydrated = async (query, projection = {}) => {
-  return await User.findOne(query, projection)
+exports.getUserHydrated = (query, projection = {}) => {
+  return User.findOne(query, projection)
 }
