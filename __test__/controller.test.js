@@ -1,369 +1,12 @@
 const request = require('supertest')
 const { app } = require('../server')
 const { clearDb } = require('../utils/clearDb')
+const { PassingEmployerRegister, PassingEmployeeRegister, FailingCases, PassingLogin, Passing2Login, Failure404Login, Failure401Login, Failure400Login, ProfilePassing, PassingJob, FailingJob, PassingApplication, FailingApplications } = require('./data')
 
-const PassingEmployerRegister = {
-  "email": "devdutt.chudasama@openxcell.com",
-  "password": "devdutt",
-  "name": "Devduttsinh Chudasama",
-  "userType": "EMPLOYER",
-  "contactNumber": "7698559806",
-  "contactEmail": "devdutt@email.com"
-}
-const PassingEmployeeRegister = {
-  "email": "devdut.chudasama@openxcell.com",
-  "password": "devdutt",
-  "name": "Devduttsinh Chudasama",
-  "userType": "EMPLOYEE",
-  "contactNumber": "7698559806",
-  "contactEmail": "devdutt@email.com"
-}
-const FailingCases = [
-  {
-    "email": "devdutt.chudasama@",
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "de",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYERE",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "769855980612",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt"
-  },
-  {
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "name": "Devduttsinh Chudasama",
-    "userType": "EMPLOYER",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "devdutt",
-    "name": "Devduttsinh Chudasama",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@email.com"
-  },
-  {}
-]
-
-const PassingLogin = {
-  "email": "devdutt.chudasama@openxcell.com",
-  "password": "devdutt"
-}
-const Passing2Login = {
-  "email": "devdut.chudasama@openxcell.com",
-  "password": "devdutt"
-}
-const Failure404Login = {
-  "email": "devdutt.chuma@openxcell.com",
-  "password": "devdutt"
-}
-const Failure401Login = {
-  "email": "devdutt.chudasama@openxcell.com",
-  "password": "devdtt"
-}
-const Failure400Login = [
-  {
-    "email": "devduttnxcell.com",
-    "password": "devdutt"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": ""
-  },
-  {
-    "email": "",
-    "password": "devdutt"
-  },
-  {
-    "email": "devdutt.chudasama@openxcell.com",
-    "password": "de"
-  }
-]
-
-const ProfilePassing = [
-  {
-    "name": "Devdutt chuadasma",
-    "contactNumber": "7698559806",
-    "contactEmail": "devdutt@mail.com",
-  },
-  {
-    "name": "Devdutt chuadasma",
-    "contactEmail": "devdutt@mail.com",
-  },
-  {
-    "name": "Devdutt chuadasma",
-    "contactNumber": "7698559806",
-  },
-  {
-    "name": "Devdutt chuadasma",
-  },
-]
-
+let jobId;
+let applicationId;
 let employertoken;
 let employeetoken;
-const PassingJob = [
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": false,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  }
-]
-const FailingJob = [
-  {
-    "minimumExperience": "as",
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": 12,
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "crit",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": "Y",
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": false,
-    "paymentType": "HOURLYE",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": "asd"
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-  },
-  {}
-]
-let jobId;
-
-let applicationId;
-const PassingApplication = {
-  "totalExperience": 2,
-  "pastExperiences": [
-    {
-      "role": "developer",
-      "descripion": "develop websites according to requirmnets",
-      "duration": 1.2
-    },
-    {
-      "role": "engineer",
-      "descripion": "find better solutions to problems"
-    }
-  ],
-  "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-}
-const FailingApplications = [
-  {
-    "pastExperiences": [
-      {
-        "role": "developer",
-        "descripion": "develop websites according to requirmnets",
-        "duration": 1.2
-      },
-      {
-        "role": "engineer",
-        "descripion": "find better solutions to problems"
-      }
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-  {
-    "totalExperience": "qw",
-    "pastExperiences": [
-      {
-        "role": "developer",
-        "descripion": "develop websites according to requirmnets",
-        "duration": 1.2
-      },
-      {
-        "role": "engineer",
-        "descripion": "find better solutions to problems"
-      }
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-  {
-    "totalExperience": 2,
-    "pastExperiences": [
-      {
-        "role": "developer",
-        "descripion": "develop websites according to requirmnets",
-        "duration": "as"
-      }
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-  {
-    "totalExperience": 2,
-    "pastExperiences": [
-      {
-        "role": "developer",
-        "descripion": "dev",
-        "duration": 1.2
-      }
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-  {
-    "totalExperience": 2,
-    "pastExperiences": [
-      {
-        "descripion": "develop websites according to requirmnets"
-      },
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-  {
-    "totalExperience": 2,
-    "pastExperiences": [
-      {
-        "role": "developer",
-        "duration": 1.2
-      },
-      {
-        "role": "engineer",
-        "descripion": "find better solutions to problems"
-      }
-    ],
-    "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
-  },
-]
 
 describe('POST /register', () => { 
   describe('passing cases', () => { 
@@ -454,11 +97,11 @@ describe('GET /profile', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get('/api/profile').set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get('/api/profile').set({ "authorization": `bearer ${employertoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get('/api/profile').set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get('/api/profile').set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
   })
@@ -489,11 +132,11 @@ describe('PUT /profile', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).put('/api/profile').set({ "authorization": `bearer ${employertoken}werw`}).send(ProfilePassing[0])
+      const responce = await request(app).put('/api/profile').set({ "authorization": `bearer ${employertoken}y`}).send(ProfilePassing[0])
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).put('/api/profile').set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`}).send(ProfilePassing[0])
+      const responce = await request(app).put('/api/profile').set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`}).send(ProfilePassing[0])
       expect(responce.statusCode).toBe(401)
     })
   })
@@ -547,11 +190,11 @@ describe('GET /jobs', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get('/api/jobs').set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get('/api/jobs').set({ "authorization": `bearer ${employertoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get('/api/jobs').set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get('/api/jobs').set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
   })
@@ -583,11 +226,11 @@ describe('GET /jobs/:jobId', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/jobs/${jobId}`).set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get(`/api/jobs/${jobId}`).set({ "authorization": `bearer ${employertoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/jobs/${jobId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/jobs/${jobId}`).set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 404 job not found', async () => { 
@@ -663,11 +306,11 @@ describe('GET /getApplications', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer ${employertoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/applications/${jobId}`).set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 404 job/application not found', async () => { 
@@ -701,11 +344,11 @@ describe('GET /getApplied', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/applied`).set({ "authorization": `bearer ${employeetoken}werw`})
+      const responce = await request(app).get(`/api/applied`).set({ "authorization": `bearer ${employeetoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/applied`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/applied`).set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
   })
@@ -734,11 +377,11 @@ describe('GET /getApplication', () => {
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 invalid token', async () => { 
-      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer ${employertoken}werw`})
+      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer ${employertoken}y`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 401 expired token', async () => { 
-      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6IkRldmR1dHRzaW5oIENodWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ3ZjEyM2M4MWZiOGQ4NzA3OGMwODQ1IiwiaWF0IjoxNjg2MDU1Njc5LCJleHAiOjE2ODYwNTYwMzl9.8Np_mpxxIMX7lZK4Xegx1xtYQncFY48IQXKOqHm0Rpk`})
+      const responce = await request(app).get(`/api/application/${applicationId}`).set({ "authorization": `bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVSIiwibmFtZSI6ImRldmR1dHQgY2h1YWRhc2FtYSIsImVtYWlsIjoiZGV2ZHV0dC5jaHVkYXNhbWFAb3BlbnhjZWxsLmNvbSIsImlkIjoiNjQ4MTk5Y2Q1YzdmMDI4YTg1ZWUxMTEwIiwiaWF0IjoxNjg2MjE2MDMyLCJleHAiOjE2ODYzMDI0MzJ9.CeHWocRCSY_8QAiDFTAzkdtvLUdZleDQtzkFS4nVoDRHJhv-yOCLUvVduCDargmR0lmzh6_PxxoTObWJFgMeV3Lci431UfOA5ArbFMIJz1nO5WqkOdAxL4WFZ_Bhk0mTlcYMXjwempwnsl9RKiH27LkmqqRAQEu-62l2cV-cMiZ0T0DmjhA11ImYiPLzrwtzV5vn2qyDsxaJAgwSG9fkK8eg_278RIfaSRg1244UisN978ZPszIpuYKtLH3X1n6dxIrqAr3bSNGedKm3nR9hMaxht33r0_odCR612yiGUgd4XEmv703tXLJqGTJo6rwXFpmAo3ArTpVbux33QdYTuw`})
       expect(responce.statusCode).toBe(401)
     })
     test('should return with status 404 job/application not found', async () => { 
