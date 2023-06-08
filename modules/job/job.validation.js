@@ -1,19 +1,9 @@
-const { CODE } = require('../../utils/constant')
-const { applicationValidation, jobValidation } = require('../../utils/validator')
-
-
-const validationClosure = (validation, body) => {
-  const { error, value } = validation(body)
-
-  if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
-
-  return value
-}
+const { applicationValidation, jobValidation, validationHelper } = require('../../utils/validator')
 
 exports.JobValidation = (body) => {
-  return validationClosure(jobValidation, body)
+  return validationHelper(jobValidation, body)
 }
 
 exports.ApplicationValidation = (body) => {
-  return validationClosure(applicationValidation, body)
+  return validationHelper(applicationValidation, body)
 }

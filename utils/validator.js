@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { ENUMS, CODE } = require('./constant')
 
 const validate = (schema) => (body) => {
   return schema.validate(body)
@@ -7,8 +8,8 @@ const validate = (schema) => (body) => {
 const UserRegisterSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-  name: Joi.string().optional(),
-  userType: Joi.string().valid('EMPLOYER','EMPLOYEE').required(),
+  name: Joi.string().min(2).max(40).required(),
+  userType: Joi.string().valid(ENUMS.EMPLOYEE, ENUMS.EMPLOYER).required(),
   contactNumber: Joi.number().min(0).max(9999999999).optional(),
   contactEmail: Joi.string().email().optional(),
 })
@@ -34,7 +35,7 @@ const JobSchema = Joi.object({
     then: Joi.number().min(0).required(),
     otherwise: Joi.number().optional()
   }),
-  paymentType: Joi.string().valid('HOURLY', 'MONTHLY').required(),
+  paymentType: Joi.string().valid(ENUMS.HOURLY, ENUMS.MONTHLY).required(),
   salary: Joi.number().min(1).max(10000000).required()
 })
 
@@ -47,6 +48,14 @@ const ApplicationSchema = Joi.object({
     duration: Joi.number().precision(1).min(0),
   }).optional(),
 })
+
+exports.validationHelper = (validation, body) => {
+  const { error, value } = validation(body)
+
+  if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
+
+  return value
+}
 
 exports.registerValidate = validate(UserRegisterSchema)
 exports.loginValidation = validate(LoginSchema)

@@ -1,22 +1,13 @@
-const { CODE } = require('../../utils/constant')
-const { registerValidate, loginValidation, profileValidation } = require('../../utils/validator')
-
-const validationClosure = (validation, body) => {
-  const { error, value } = validation(body)
-
-  if(error) throw new Error(JSON.stringify({ code: CODE.validation, message: error.message }))
-
-  return value
-}
+const { registerValidate, loginValidation, profileValidation, validationHelper } = require('../../utils/validator')
 
 exports.createUserValidation = (body) => {
-  return validationClosure(registerValidate, body)
+  return validationHelper(registerValidate, body)
 }
 
 exports.loginValidation = (body) => {
-  return validationClosure(loginValidation, body)
+  return validationHelper(loginValidation, body)
 }
 
 exports.editProfileValidation = (body) => {
-  return validationClosure(profileValidation, body)
+  return validationHelper(profileValidation, body)
 }
