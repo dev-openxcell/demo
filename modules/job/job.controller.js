@@ -45,14 +45,14 @@ exports.createJob = async (req, res) => {
     
     const value = validator.JobValidation(req.body)
 
-    const { minimumExperience, jobTitle, jobDescrpition, isCommitmentRequired, minimumJobCommitment, paymentType, salary } = value
+    const { minimumExperience, jobTitle, jobDescription, isCommitmentRequired, minimumJobCommitment, paymentType, salary } = value
 
     const body = {
       creatorId: user._id, 
       creatorName: user.name, 
       minimumExperience, 
       jobTitle, 
-      jobDescrpition, 
+      jobDescription, 
       isCommitmentRequired, 
       minimumJobCommitment, 
       paymentType, 
@@ -171,14 +171,14 @@ exports.getJobs = async (req, res) => {
       creatorName: 1,
       minimumExperience: 1,
       jobTitle: 1,
-      jobDescrpition: 1,
+      jobDescription: 1,
     }
-    const qury = {}
+    const query = {}
     if(user.userType === ENUMS.EMPLOYER) {
-      Object.assign(qury, { creatorId: user._id })
+      Object.assign(query, { creatorId: user._id })
     }
 
-    jobs = await service.getJobs(qury, projection, limit ? limit : 25, skip ? skip : 0)
+    jobs = await service.getJobs(query, projection, limit ? limit : 25, skip ? skip : 0)
     
     sendres(200, { jobs }, res)
   }

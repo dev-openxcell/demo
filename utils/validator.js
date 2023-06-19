@@ -28,7 +28,7 @@ const EditProfileSchema = Joi.object({
 const JobSchema = Joi.object({
   minimumExperience: Joi.number().min(0).max(50).required(),
   jobTitle: Joi.string().min(2).max(30).required(),
-  jobDescrpition: Joi.string().min(15).required(),
+  jobDescription: Joi.string().min(15).required(),
   isCommitmentRequired: Joi.boolean().required(),
   minimumJobCommitment: Joi.number().when('isCommitmentRequired', {
     is: true,
@@ -44,7 +44,7 @@ const ApplicationSchema = Joi.object({
   linkToResume: Joi.string().uri().optional(),
   pastExperiences: Joi.array().items({
     role: Joi.string().min(2).max(30).required(),
-    descripion: Joi.string().min(15).max(2000).required(),
+    description: Joi.string().min(15).max(2000).required(),
     duration: Joi.number().precision(1).min(0),
   }).optional(),
 })

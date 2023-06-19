@@ -32,7 +32,7 @@ const ApplicationSchema = new mongoose.Schema({
     _id=false,
     {
       role: String,
-      descripion: String,
+      description: String,
       duration: Number
     }
   ],

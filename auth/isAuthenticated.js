@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const fs = require('node:fs')
 const path = require('node:path')
 const { getUserHydrated } = require('../modules/user/user.service')
-const { MESSAGE, OPEN_URLS } = require('../utils/constant')
+const { MESSAGE, OPEN_URLS, EXPIRE } = require('../utils/constant')
 const { sendres, havingError } = require('../utils/sendres')
 
 const verifyToken = (token) => {
@@ -26,7 +26,7 @@ exports.createToken = (data) => {
     id: data._id
   }
   const priv = fs.readFileSync(path.resolve(__dirname, '../ssh/private.key'), 'utf-8')
-  return jwt.sign(payload, priv, { expiresIn: '24h', algorithm: 'RS256' })
+  return jwt.sign(payload, priv, { expiresIn: EXPIRE.LOGIN, algorithm: 'RS256' })
 }
 
 exports.isAuthenticated = async (req, res, next) => {

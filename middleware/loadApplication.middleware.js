@@ -4,6 +4,7 @@ const { sendres, havingError } = require('../utils/sendres')
 
 exports.loadApplication = async (req, res, next, applicationId) => {
   try{
+    if(!applicationId || applicationId === 'undefined') return sendres(400, { message: MESSAGE.NOT_FOUND }, res )
     const projection = {
       jobId: 1,
       applierId: 1,

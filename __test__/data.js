@@ -139,7 +139,7 @@ const PassingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -148,7 +148,7 @@ const PassingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": false,
     "paymentType": "HOURLY",
     "salary": 20000
@@ -158,7 +158,7 @@ const FailingJob = [
   {
     "minimumExperience": "as",
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -166,7 +166,7 @@ const FailingJob = [
   },
   {
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -175,7 +175,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": 12,
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -183,16 +183,7 @@ const FailingJob = [
   },
   {
     "minimumExperience": 1,
-    "jobDescrpition": "critical thinker who can think of creative solutions",
-    "isCommitmentRequired": true,
-    "minimumJobCommitment": 1,
-    "paymentType": "HOURLY",
-    "salary": 20000
-  },
-  {
-    "minimumExperience": 1,
-    "jobTitle": "enginner",
-    "jobDescrpition": "crit",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -201,6 +192,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
+    "jobDescription": "crit",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -209,7 +201,15 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "isCommitmentRequired": true,
+    "minimumJobCommitment": 1,
+    "paymentType": "HOURLY",
+    "salary": 20000
+  },
+  {
+    "minimumExperience": 1,
+    "jobTitle": "enginner",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": "Y",
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -218,7 +218,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
     "salary": 20000
@@ -226,7 +226,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "paymentType": "HOURLY",
     "salary": 20000
@@ -234,7 +234,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": false,
     "paymentType": "HOURLYE",
     "salary": 20000
@@ -242,7 +242,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "salary": 20000
@@ -250,7 +250,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -259,7 +259,7 @@ const FailingJob = [
   {
     "minimumExperience": 1,
     "jobTitle": "enginner",
-    "jobDescrpition": "critical thinker who can think of creative solutions",
+    "jobDescription": "critical thinker who can think of creative solutions",
     "isCommitmentRequired": true,
     "minimumJobCommitment": 1,
     "paymentType": "HOURLY",
@@ -273,12 +273,12 @@ const PassingApplication = {
   "pastExperiences": [
     {
       "role": "developer",
-      "descripion": "develop websites according to requirmnets",
+      "description": "develop websites according to requirmnets",
       "duration": 1.2
     },
     {
       "role": "engineer",
-      "descripion": "find better solutions to problems"
+      "description": "find better solutions to problems"
     }
   ],
   "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
@@ -288,12 +288,12 @@ const FailingApplications = [
     "pastExperiences": [
       {
         "role": "developer",
-        "descripion": "develop websites according to requirmnets",
+        "description": "develop websites according to requirmnets",
         "duration": 1.2
       },
       {
         "role": "engineer",
-        "descripion": "find better solutions to problems"
+        "description": "find better solutions to problems"
       }
     ],
     "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
@@ -303,12 +303,12 @@ const FailingApplications = [
     "pastExperiences": [
       {
         "role": "developer",
-        "descripion": "develop websites according to requirmnets",
+        "description": "develop websites according to requirmnets",
         "duration": 1.2
       },
       {
         "role": "engineer",
-        "descripion": "find better solutions to problems"
+        "description": "find better solutions to problems"
       }
     ],
     "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
@@ -318,7 +318,7 @@ const FailingApplications = [
     "pastExperiences": [
       {
         "role": "developer",
-        "descripion": "develop websites according to requirmnets",
+        "description": "develop websites according to requirmnets",
         "duration": "as"
       }
     ],
@@ -329,7 +329,7 @@ const FailingApplications = [
     "pastExperiences": [
       {
         "role": "developer",
-        "descripion": "dev",
+        "description": "dev",
         "duration": 1.2
       }
     ],
@@ -339,7 +339,7 @@ const FailingApplications = [
     "totalExperience": 2,
     "pastExperiences": [
       {
-        "descripion": "develop websites according to requirmnets"
+        "description": "develop websites according to requirmnets"
       },
     ],
     "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"
@@ -353,7 +353,7 @@ const FailingApplications = [
       },
       {
         "role": "engineer",
-        "descripion": "find better solutions to problems"
+        "description": "find better solutions to problems"
       }
     ],
     "linkToResume": "https://somedomain.com/aasdasd/png.jpeg"

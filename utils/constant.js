@@ -2,6 +2,11 @@ const CODE = {
   'validation': '001',
 }
 
+const EXPIRE = {
+  'LOGIN': 24*3600,
+  'FORGOT': 3600
+}
+
 const OPEN_URLS = [
   '/api/register',
   '/api/login'
@@ -46,4 +51,4 @@ const ERROR_NAME = {
 
 const ALLOWED_EXTENSION = ["application/msword", "application/pdf"]
 
-module.exports = { CODE, MESSAGE, ENUMS, ENUMS_ARR, MODELS, OPEN_URLS, ERROR_NAME, ALLOWED_EXTENSION }
+module.exports = { CODE, MESSAGE, ENUMS, ENUMS_ARR, MODELS, OPEN_URLS, ERROR_NAME, ALLOWED_EXTENSION, EXPIRE }
